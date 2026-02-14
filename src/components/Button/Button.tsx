@@ -1,31 +1,45 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import {
   PrimaryButton,
   SecondaryButton,
   FilterItem,
 } from "./styles";
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  iconLeft?: ReactNode;
+}
 
 interface FilterItemButtonProps extends ButtonProps {
   isSelected?: boolean;
 }
 
-export function Primary({ children, ...props }: ButtonProps) {
-  return <PrimaryButton {...props}>{children}</PrimaryButton>;
+export function Primary({ children, iconLeft, ...props }: ButtonProps) {
+  return (
+    <PrimaryButton {...props}>
+      {iconLeft}
+      {children}
+    </PrimaryButton>
+  );
 }
 
-export function Secondary({ children, ...props }: ButtonProps) {
-  return <SecondaryButton {...props}>{children}</SecondaryButton>;
+export function Secondary({ children, iconLeft, ...props }: ButtonProps) {
+  return (
+    <SecondaryButton {...props}>
+      {iconLeft}
+      {children}
+    </SecondaryButton>
+  );
 }
 
 export function Filter({
   children,
+  iconLeft,
   isSelected,
   ...props
 }: FilterItemButtonProps) {
   return (
     <FilterItem $isSelected={isSelected} {...props}>
+      {iconLeft}
       {children}
     </FilterItem>
   );

@@ -6,6 +6,7 @@ interface PostsState {
   items: Post[];
   currentPost: Post | null;
   status: "idle" | "loading" | "succeeded" | "failed";
+  currentPostStatus: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: PostsState = {
   items: [],
   currentPost: null,
   status: "idle",
+  currentPostStatus: "idle",
   error: null,
 };
 
@@ -45,14 +47,14 @@ const postsSlice = createSlice({
         state.error = action.error.message ?? null;
       })
       .addCase(fetchPostById.pending, (state) => {
-        state.status = "loading";
+        state.currentPostStatus = "loading";
       })
       .addCase(fetchPostById.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.currentPostStatus = "succeeded";
         state.currentPost = action.payload;
       })
       .addCase(fetchPostById.rejected, (state, action) => {
-        state.status = "failed";
+        state.currentPostStatus = "failed";
         state.error = action.error.message ?? null;
       });
   },

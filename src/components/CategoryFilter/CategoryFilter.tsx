@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Filter } from "../Button/Button";
 import { SkeletonBlock } from "../PostCard/skeleton-styles";
 import { FilterCategoryTitle } from "./styles";
@@ -8,6 +8,7 @@ interface CategoryFilterProps {
   items: { id: string; name: string }[];
   isLoading?: boolean;
   onSelectionChange: (selected: string[]) => void;
+  externalSelected?: string[];
 }
 
 export function CategoryFilter({
@@ -15,17 +16,22 @@ export function CategoryFilter({
   items,
   isLoading,
   onSelectionChange,
+  externalSelected,
 }: CategoryFilterProps) {
   const [selected, setSelected] = useState<string[]>([]);
 
+  useEffect(() => {
+    if (externalSelected) {
+      setSelected(externalSelected);
+    }
+  }, [externalSelected]);
+
   const toggle = (name: string) => {
-    setSelected((prev) => {
-      const next = prev.includes(name)
-        ? prev.filter((s) => s !== name)
-        : [...prev, name];
-      onSelectionChange(next);
-      return next;
-    });
+    const next = selected.includes(name)
+      ? selected.filter((s) => s !== name)
+      : [...selected, name];
+    setSelected(next);
+    onSelectionChange(next);
   };
 
   return (

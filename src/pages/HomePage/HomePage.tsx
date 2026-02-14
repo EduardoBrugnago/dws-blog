@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FilterSidebar } from "../../components/FilterSidebar/FilterSidebar";
 import { PostGrid } from "../../components/PostGrid/PostGrid";
@@ -34,35 +35,49 @@ export default function HomePage() {
   const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>({ categories: [], authors: [] });
   const [sortNewest, setSortNewest] = useState(true);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   useEffect(() => {
     if (postsStatus === "idle") dispatch(fetchPosts());
-    if (catStatus === "idle") dispatch(fetchCategories());
-    if (authStatus === "idle") dispatch(fetchAuthors());
   }, [postsStatus, catStatus, authStatus, dispatch]);
 
-  const filteredPosts = posts.filter((post) => {
-    const matchesCategory =
-      appliedFilters.categories.length === 0 ||
-      post.categories.some((c) =>
-        appliedFilters.categories.some(
-          (fc) => fc.toLowerCase() === c.name.toLowerCase()
-        )
-      );
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    const authorParam = searchParams.get("author");
 
-    const matchesAuthor =
-      appliedFilters.authors.length === 0 ||
-      appliedFilters.authors.some(
-        (fa) => fa.toLowerCase() === post.author.name.toLowerCase()
-      );
+    if (categoryParam || authorParam) {
+      setAppliedFilters({
+        categories: categoryParam ? [categoryParam] : [],
+        authors: authorParam ? [authorParam] : [],
+      });
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
-    return matchesCategory && matchesAuthor;
-  });
+  const filteredPosts = useMemo(() => {
+    const cats = appliedFilters.categories.map((c) => c.toLowerCase());
+    const auths = appliedFilters.authors.map((a) => a.toLowerCase());
 
-  const sortedPosts = [...filteredPosts].sort((a, b) => {
-    const dateA = new Date(a.createdAt).getTime();
-    const dateB = new Date(b.createdAt).getTime();
-    return sortNewest ? dateB - dateA : dateA - dateB;
-  });
+    return posts.filter((post) => {
+      const matchesCategory =
+        cats.length === 0 ||
+        post.categories.some((c) => cats.includes(c.name.toLowerCase()));
+
+      const matchesAuthor =
+        auths.length === 0 ||
+        auths.includes(post.author.name.toLowerCase());
+
+      return matchesCategory && matchesAuthor;
+    });
+  }, [posts, appliedFilters]);
+
+  const sortedPosts = useMemo(() => {
+    return [...filteredPosts].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortNewest ? dateB - dateA : dateA - dateB;
+    });
+  }, [filteredPosts, sortNewest]);
 
   return (
     <PageContainer>
@@ -83,6 +98,7 @@ export default function HomePage() {
           authors={authors}
           isLoading={filtersLoading}
           onApply={setAppliedFilters}
+          appliedFilters={appliedFilters}
           sortNewest={sortNewest}
           setSortNewest={setSortNewest}
         />

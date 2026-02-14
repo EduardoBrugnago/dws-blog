@@ -4,10 +4,13 @@ const baseStyles = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   border-radius: 42px;
   cursor: pointer;
   transition: all 0.2s;
   font-family: ${({ theme }) => theme.fontFamily};
+
+
 `;
 
 export const PrimaryButton = styled.button`

@@ -21,7 +21,6 @@ export const Container = styled.div<{ $isFocused?: boolean }>`
           : theme.colors.neutrals.extraLight};
       padding: 8px 8px 8px 16px;
       width: 100%;
-      max-width: clamp(200px, 40vw, 600px);
 
       &:hover {
         border-color: ${theme.colors.accent1.medium};

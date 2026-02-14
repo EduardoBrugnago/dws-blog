@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { CategoryFilter } from "../CategoryFilter/CategoryFilter";
 import DropdownSelect from "../DropdownSelect/DropdownSelect";
 import { PrimaryButton } from "../Button/styles";
@@ -28,6 +28,7 @@ interface FilterSidebarProps {
   authors: FilterItem[];
   isLoading: boolean;
   onApply: (filters: AppliedFilters) => void;
+  appliedFilters: AppliedFilters;
   sortNewest: boolean;
   setSortNewest: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -37,11 +38,17 @@ export function FilterSidebar({
   authors,
   isLoading,
   onApply,
+  appliedFilters,
   sortNewest,
   setSortNewest
 }: FilterSidebarProps) {
   const [pendingCategories, setPendingCategories] = useState<string[]>([]);
   const [pendingAuthors, setPendingAuthors] = useState<string[]>([]);
+
+  useEffect(() => {
+    setPendingCategories(appliedFilters.categories);
+    setPendingAuthors(appliedFilters.authors);
+  }, [appliedFilters]);
 
   const handleCategoryChange = useCallback((selected: string[]) => {
     setPendingCategories(selected);
@@ -71,12 +78,14 @@ export function FilterSidebar({
             items={categories}
             isLoading={isLoading}
             onSelectionChange={handleCategoryChange}
+            externalSelected={pendingCategories}
           />
           <CategoryFilter
             title="Author"
             items={authors}
             isLoading={isLoading}
             onSelectionChange={handleAuthorChange}
+            externalSelected={pendingAuthors}
           />
         </FiltersSection>
         <PrimaryButton onClick={handleApply}>Apply Filters</PrimaryButton>

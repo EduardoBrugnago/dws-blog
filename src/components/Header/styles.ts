@@ -36,6 +36,17 @@ export const Logo = styled.span`
   `}
 `;
 
+export const SearchWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: clamp(200px, 40vw, 600px);
+
+  @media (max-width: 767px) {
+    width: auto;
+    max-width: none;
+  }
+`;
+
 export const SearchInput = styled.input`
   ${({ theme }) => css`
     padding: 8px 16px;
