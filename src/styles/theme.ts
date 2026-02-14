@@ -58,7 +58,7 @@ export const theme = {
     caption: {
       size: "0.75rem",
       lineHeight: "130%",
-      weight: 400,
+      weight: "400",
     },
   },
 } as const;
