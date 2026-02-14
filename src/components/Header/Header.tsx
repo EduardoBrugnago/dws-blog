@@ -1,10 +1,11 @@
-import { HeaderContainer, Logo, SearchInput } from "./styles";
+import { SearchBar } from "../SearchBar/SearchBar";
+import { HeaderContainer, Logo, } from "./styles";
 
 export default function Header() {
   return (
     <HeaderContainer>
       <Logo>dentsu <p >world service</p></Logo>
-      <SearchInput type="text" placeholder="Pesquisar..." />
+      <SearchBar type="text" placeholder="Pesquisar..." />
     </HeaderContainer>
   );
 }
