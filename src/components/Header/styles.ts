@@ -4,13 +4,19 @@ export const HeaderContainer = styled.header`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    background-color: ${theme.colors.primary.medium};
 
-    @media (max-width: 768px) {
-      flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 56px;
+    background-color: transparent;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid ${theme.colors.neutrals.extraLight};
+    @media (max-width: 1024px) {
       gap: 12px;
+      padding: 16px 32px;
+    }
+    @media (max-width: 768px) {
+
+      gap: 8px;
       padding: 16px;
     }
   `}
@@ -19,10 +25,14 @@ export const HeaderContainer = styled.header`
 export const Logo = styled.span`
   ${({ theme }) => css`
     font-family: ${theme.fontFamily};
-    font-size: ${theme.typography.h3.size};
-    font-weight: ${theme.typography.h3.weight};
-    line-height: ${theme.typography.h3.lineHeight};
-    color: ${theme.colors.neutrals.lightest};
+    font-size: ${theme.typography.h2.size};
+    font-weight: ${theme.typography.h2.weight};
+    line-height: ${theme.typography.h2.lineHeight};
+    color: ${theme.colors.primary.dark};
+    span {
+      font-size: ${theme.typography.bodyLarge.size};
+      font-weight: ${theme.typography.bodyLarge.weight.regular};
+    }
   `}
 `;
 

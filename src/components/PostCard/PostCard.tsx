@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Post } from "../../api/posts/types";
 import {
   Card,
@@ -26,8 +27,10 @@ function formatDate(dateString: string): string {
 }
 
 export function PostCard({ postData }: PostCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <Card>
+    <Card onClick={() => navigate(`/post/${postData.id}`)}>
       <Thumbnail src={postData.thumbnail_url} alt={postData.title} />
       <Body>
         <Info>

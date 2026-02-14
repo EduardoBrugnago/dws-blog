@@ -4,7 +4,7 @@ export const Card = styled.div`
   ${({ theme }) => css`
     border-radius: 16px;
     width: 100%;
-    height: 100%;
+    height: auto;
     max-width: 314px;
     max-height: 425px;
     display: flex;
@@ -13,6 +13,12 @@ export const Card = styled.div`
     align-items: flex-start;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
   `}
 `;
 
@@ -28,6 +34,7 @@ export const Content = styled.div`
   flex-direction: column;
   gap: 8px;
   padding: 0px;
+  height: 114px;
 `;
 
 export const Body = styled.div`
@@ -44,9 +51,9 @@ export const Info = styled.span`
     gap: 8px;
     font-family: ${theme.fontFamily};
     font-size: ${theme.typography.caption.size};
-    line-height: ${theme.typography.caption.lineHeight};
     font-weight: ${theme.typography.caption.weight};
     color: ${theme.colors.neutrals.medium};
+    paddingblock: 4px;
   `}
 `;
 

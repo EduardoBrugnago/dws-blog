@@ -37,6 +37,7 @@ export default function DropdownSelect({
   }, [isOpen, close]);
 
   function toggleOption(optionValue: string) {
+    console.log("Toggling option:", optionValue);
     if (value.includes(optionValue)) {
       onChange(value.filter((v) => v !== optionValue));
     } else {

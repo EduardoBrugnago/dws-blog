@@ -1,35 +1,68 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import DropdownSelect from "../../components/DropdownSelect/DropdownSelect";
-import { Primary, Secondary, Filter } from "../../components/Button/Button";
-import { PostCard } from "../../components/PostCard/PostCard";
+import { FilterSidebar } from "../../components/FilterSidebar/FilterSidebar";
+import { PostGrid } from "../../components/PostGrid/PostGrid";
 import { fetchPosts } from "../../store/postsSlice";
+import { fetchCategories } from "../../store/categoriesSlice";
+import { fetchAuthors } from "../../store/authorsSlice";
 import type { RootState, AppDispatch } from "../../store/store";
-import { PageContainer, Grid, FiltersContainer, FiltersHeader, FiltersIcon, FiltersSection, FilterCategory, FiltersTitle, PageTitle, PageHeader, SortContainer, SortTitle, PageContent, NoContent } from "./styles";
-import { PrimaryButton } from "../../components/Button/styles";
+import {
+  PageContainer,
+  PageHeader,
+  PageTitle,
+  SortContainer,
+  SortTitle,
+  SortButton,
+  PageContent,
+} from "./styles";
 
-const categoryOptions = [
-  { value: "tech", label: "Tecnologia" },
-  { value: "design", label: "Design" },
-  { value: "business", label: "Negócios" },
-  { value: "marketing", label: "Marketing" },
-  { value: "science", label: "Ciência" },
-];
+interface AppliedFilters {
+  categories: string[];
+  authors: string[];
+}
 
 export default function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
-  const { items: posts, status } = useSelector((state: RootState) => state.posts);
 
-  const [category, setCategory] = useState<string[]>([]);
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const { items: posts, status: postsStatus } = useSelector((s: RootState) => s.posts);
+  const { items: categories, status: catStatus } = useSelector((s: RootState) => s.categories);
+  const { items: authors, status: authStatus } = useSelector((s: RootState) => s.authors);
+
+  const isLoading = postsStatus === "loading" || catStatus === "loading" || authStatus === "loading";
+  const filtersLoading = catStatus === "loading" || authStatus === "loading";
+
+  const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>({ categories: [], authors: [] });
+  const [sortNewest, setSortNewest] = useState(true);
 
   useEffect(() => {
-    console.log(status)
-    if (status === "idle") {
-      dispatch(fetchPosts());
-    }
-  }, [status, dispatch]);
+    if (postsStatus === "idle") dispatch(fetchPosts());
+    if (catStatus === "idle") dispatch(fetchCategories());
+    if (authStatus === "idle") dispatch(fetchAuthors());
+  }, [postsStatus, catStatus, authStatus, dispatch]);
 
+  const filteredPosts = posts.filter((post) => {
+    const matchesCategory =
+      appliedFilters.categories.length === 0 ||
+      post.categories.some((c) =>
+        appliedFilters.categories.some(
+          (fc) => fc.toLowerCase() === c.name.toLowerCase()
+        )
+      );
+
+    const matchesAuthor =
+      appliedFilters.authors.length === 0 ||
+      appliedFilters.authors.some(
+        (fa) => fa.toLowerCase() === post.author.name.toLowerCase()
+      );
+
+    return matchesCategory && matchesAuthor;
+  });
+
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    return sortNewest ? dateB - dateA : dateA - dateB;
+  });
 
   return (
     <PageContainer>
@@ -37,46 +70,24 @@ export default function HomePage() {
         <PageTitle>DWS Blog</PageTitle>
         <SortContainer>
           <SortTitle>Sort by:</SortTitle>
+          <SortButton onClick={() => setSortNewest((prev) => !prev)}>
+            <span className="material-symbols-outlined">swap_vert</span>
+            {sortNewest ? "Newest first" : "Oldest first"}
+          </SortButton>
         </SortContainer>
       </PageHeader>
 
       <PageContent>
-        <FiltersContainer>
-          <FiltersHeader>
-            <FiltersIcon className="material-symbols-outlined">tune</FiltersIcon>
-            <FiltersTitle>Filters</FiltersTitle>
-          </FiltersHeader>
-          <FiltersSection>
-            <FilterCategory>Category</FilterCategory>
-            {categoryOptions.map((option) => (
-              <Filter key={option.value} isSelected={category.includes(option.value)}>
-                {option.label}
-              </Filter>
-            ))}
-            <FilterCategory>Author</FilterCategory>
-            {categoryOptions.map((option) => (
-              <Filter key={option.value} isSelected={category.includes(option.value)}>
-                {option.label}
-              </Filter>
-            ))}
-          </FiltersSection>
-          <PrimaryButton>Apply Filters</PrimaryButton>
-        </FiltersContainer>
-
-        {
-          posts?.length === 0 ? (
-            <NoContent>
-              <p>No posts found.</p>
-            </NoContent>
-          ) : (
-            <Grid>
-              {posts.map((post) => (
-                <PostCard key={post.id} postData={post} />
-              ))}
-            </Grid>
-          )}
+        <FilterSidebar
+          categories={categories}
+          authors={authors}
+          isLoading={filtersLoading}
+          onApply={setAppliedFilters}
+          sortNewest={sortNewest}
+          setSortNewest={setSortNewest}
+        />
+        <PostGrid posts={sortedPosts} isLoading={isLoading} />
       </PageContent>
-
     </PageContainer>
   );
 }

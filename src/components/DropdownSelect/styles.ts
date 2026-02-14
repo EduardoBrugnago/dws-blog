@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 export const DropdownWrapper = styled.div`
   position: relative;
   display: inline-block;
+  width: fit-content;
 `;
 
 export const DropdownButton = styled.button<{ $isOpen: boolean }>`
@@ -38,7 +39,8 @@ export const Menu = styled.ul`
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
-    width: 314px;
+    min-width: 150px;
+    max-width: 314px;
     max-height: 204px;
     overflow-y: auto;
     scrollbar-width: none;

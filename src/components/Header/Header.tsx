@@ -4,7 +4,7 @@ import { HeaderContainer, Logo, } from "./styles";
 export default function Header() {
   return (
     <HeaderContainer>
-      <Logo>dentsu <p >world service</p></Logo>
+      <Logo>dentsu < span>world services</span></Logo>
       <SearchBar type="text" placeholder="Pesquisar..." />
     </HeaderContainer>
   );
