@@ -6,7 +6,7 @@ export const PageWrapper = styled.div`
     flex-direction: column;
     padding: 16px;
 
-    @media (min-width: 768px) {
+    @media (min-width: 769px) {
       flex-direction: row;
       padding: 32px 56px;
       gap: 32px;
@@ -18,7 +18,7 @@ export const BackButtonArea = styled.div`
   flex-shrink: 0;
   margin-bottom: 16px;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     margin-bottom: 0;
   }
 `;
@@ -27,7 +27,7 @@ export const PostContainer = styled.div`
   ${({ theme }) => css`
     width: 100%;
 
-    @media (min-width: 768px) {
+    @media (min-width: 769px) {
       flex: 1;
       max-width: clamp(320px, 80vw, 900px);
       margin: 0 auto;
@@ -98,7 +98,23 @@ export const PostContent = styled.p`
     margin: 0 0 32px;
   `}
 `;
-
+export const NotFound = styled.div`
+  ${({ theme }) => css`
+    padding: 32px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    p {
+      font-family: ${theme.fontFamily};
+      font-size: ${theme.typography.bodyLarge.size};
+      line-height: ${theme.typography.bodyLarge.lineHeight};
+      font-weight: ${theme.typography.bodyLarge.weight.regular};
+      color: ${theme.colors.neutrals.extraDark};
+      margin: 0 0 32px;
+      text-align: center;
+    }
+  `}
+`;
 export const Divider = styled.hr`
   ${({ theme }) => css`
     border: none;

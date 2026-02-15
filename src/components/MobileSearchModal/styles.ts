@@ -11,7 +11,7 @@ export const ModalOverlay = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     display: none;
   }
 `;

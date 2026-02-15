@@ -5,6 +5,7 @@ import { Secondary } from "../../components/Button/Button";
 import { LatestArticles } from "../../components/LatestArticles/LatestArticles";
 import { fetchPostById } from "../../store/postsSlice";
 import type { RootState, AppDispatch } from "../../store/store";
+import { Spinner } from "../../components/Spinner/Spinner";
 import {
   PageWrapper,
   BackButtonArea,
@@ -16,13 +17,13 @@ import {
   PostImage,
   PostContent,
   Divider,
+  NotFound,
 } from "./styles";
 
 export default function PostPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
 
   const { items: posts, currentPost, currentPostStatus } = useSelector(
     (s: RootState) => s.posts
@@ -34,7 +35,6 @@ export default function PostPage() {
 
 
   useEffect(() => {
-
     window.history.scrollRestoration = "manual";
     window.scrollTo({ top: 0, behavior: "smooth" });
     return () => {
@@ -50,11 +50,7 @@ export default function PostPage() {
   }, [post, id, dispatch]);
 
   if (currentPostStatus === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  if (!post) {
-    return <div>Post not found</div>;
+    return <Spinner />;
   }
 
   function formatDate(dateString: string): string {
@@ -78,16 +74,22 @@ export default function PostPage() {
       </BackButtonArea>
 
       <PostContainer>
-        <PostTitle>{post.title}</PostTitle>
-        <AuthorSection>
-          <AuthorImage src={post.author.profilePicture} alt={post.author.name} />
-          <AuthorInfo>
-            <p>written by {post.author.name}</p>
-            <p>{formatDate(post.createdAt)}</p>
-          </AuthorInfo>
-        </AuthorSection>
-        <PostImage src={post.thumbnail_url} alt={post.title} />
-        <PostContent>{post.content}</PostContent>
+        {post ? (
+          <>
+            <PostTitle>{post.title}</PostTitle>
+            <AuthorSection>
+              <AuthorImage src={post.author.profilePicture} alt={post.author.name} />
+              <AuthorInfo>
+                <p>written by {post.author.name}</p>
+                <p>{formatDate(post.createdAt)}</p>
+              </AuthorInfo>
+            </AuthorSection>
+            <PostImage src={post.thumbnail_url} alt={post.title} />
+            <PostContent>{post.content}</PostContent>
+          </>
+        ) : (
+          <NotFound><p>Post not found</p></NotFound>
+        )}
 
         <Divider />
         <LatestArticles excludePostId={id} />

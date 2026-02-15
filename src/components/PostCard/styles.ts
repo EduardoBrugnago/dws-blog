@@ -19,6 +19,9 @@ export const Card = styled.div`
     &:hover {
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
+    @media (max-width: 768px) {
+      max-width: 100%;
+    }
   `}
 `;
 

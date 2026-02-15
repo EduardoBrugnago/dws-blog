@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { PostCard } from "../PostCard/PostCard";
 import { fetchPosts } from "../../store/postsSlice";
 import type { RootState, AppDispatch } from "../../store/store";
+import { Spinner } from "../Spinner/Spinner";
 import {
   LatestArticlesContainer,
   LatestArticlesTitle,
@@ -31,7 +32,7 @@ export function LatestArticles({ excludePostId }: LatestArticlesProps) {
   }, [posts, excludePostId]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (latestPosts.length === 0) {

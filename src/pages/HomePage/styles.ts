@@ -7,11 +7,11 @@ export const PageContainer = styled.div`
   gap: 18px;
   padding: 16px;
   justify-content: center;
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     padding: 32px 32px;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1025px) {
     padding: 32px 56px;
   `}
 `;

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { store } from "./store/store";
 import { theme } from "./styles/theme";
+import { GlobalStyles } from "./styles/GlobalStyles";
 import App from "./App";
 import "./index.css";
 
@@ -12,6 +13,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
+        <GlobalStyles />
         <BrowserRouter>
           <App />
         </BrowserRouter>

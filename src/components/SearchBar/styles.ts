@@ -14,7 +14,7 @@ export const Container = styled.div<{ $isFocused?: boolean }>`
       width: auto;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 769px) {
       border: 1px solid
         ${$isFocused
           ? theme.colors.accent1.medium
