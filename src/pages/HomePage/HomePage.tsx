@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { FilterSidebar } from "../../components/FilterSidebar/FilterSidebar";
 import { PostGrid } from "../../components/PostGrid/PostGrid";
 import { fetchPosts } from "../../store/postsSlice";
-import { fetchCategories } from "../../store/categoriesSlice";
-import { fetchAuthors } from "../../store/authorsSlice";
 import type { RootState, AppDispatch } from "../../store/store";
 import {
   PageContainer,

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Secondary } from "../../components/Button/Button";
@@ -32,7 +32,6 @@ export default function PostPage() {
   const post = useMemo(() => {
     return posts.find((p) => p.id === id) ?? currentPost;
   }, [posts, currentPost, id]);
-
 
   useEffect(() => {
     window.history.scrollRestoration = "manual";
